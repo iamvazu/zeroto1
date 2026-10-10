@@ -1,0 +1,58 @@
+name: Deploy Zeroto1 Academy to Hostinger VPS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Build & Deploy to Hostinger VPS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci || npm install
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Execute Remote Deployment via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT || 22 }}
+          script: |
+            echo ">>> Pulling latest code into /var/www/zeroto1..."
+            cd /var/www/zeroto1
+            git fetch origin main
+            git reset --hard origin/main
+
+            echo ">>> Installing dependencies..."
+            npm install --production=false
+
+            echo ">>> Generating Prisma..."
+            npx prisma generate
+
+            echo ">>> Building Next.js production bundle..."
+            npm run build
+
+            echo ">>> Reloading PM2 process zeroto1-web..."
+            pm2 reload zeroto1-web || pm2 restart zeroto1-web
+            pm2 save
+
+            echo ">>> Verifying application status..."
+            curl -f -I -s http://127.0.0.1:3025/ || exit 1
+            echo ">>> Deployment successful!"
