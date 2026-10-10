@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Light Travels in Straight Lines — zeroto1.academy</title>
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/style.css" />
+  <style>
+    .lesson-page { width:min(760px,calc(100% - 48px)); margin:32px auto 60px; }
+    .lesson-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+    .back-link { font-size:14px; font-weight:800; color:var(--ink-soft); }
+    .back-link:hover { color:var(--ink); }
+    .breadcrumb { font-size:13px; font-weight:700; color:var(--muted); }
+    .lesson-banner { border-radius:24px; overflow:hidden; margin-bottom:22px; box-shadow:var(--shadow); }
+    .lesson-banner img { width:100%; aspect-ratio:16/7; object-fit:cover; }
+    .lesson-title { font-size:clamp(30px,4vw,44px); font-weight:900; letter-spacing:-0.04em; line-height:1.02; margin:0 0 22px; }
+    .lesson-block {
+      background:#fff; border:1px solid var(--line); border-radius:22px;
+      box-shadow:var(--shadow-soft); padding:24px 26px; margin-bottom:16px;
+    }
+    .lesson-block .label { font-size:12px; font-weight:900; letter-spacing:.07em; text-transform:uppercase; color:var(--blue-dark); margin:0 0 8px; }
+    .lesson-block h2 { margin:0 0 6px; font-size:24px; font-weight:900; letter-spacing:-0.03em; }
+    .lesson-block p { margin:0; color:var(--ink-soft); font-size:16px; font-weight:650; line-height:1.5; }
+    .step-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:16px; }
+    .step-thumb { border-radius:16px; overflow:hidden; border:1px solid var(--line); background:#fff; }
+    .step-thumb img { width:100%; aspect-ratio:16/10; object-fit:cover; }
+    .step-thumb .cap { padding:10px 12px; font-size:13px; font-weight:800; color:var(--ink); }
+    .lesson-cta { text-align:center; padding:34px 0 10px; }
+    .lesson-cta h2 { font-size:26px; font-weight:900; letter-spacing:-0.03em; margin:0 0 14px; }
+    @media (max-width:640px){ .step-grid{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="/" class="brand" aria-label="zeroto1.academy home">
+        <span class="brand-mark">0→1</span>
+        <span class="brand-text">
+          <span class="brand-name">zeroto1.academy</span>
+          <span class="brand-tag">Lessons for curious kids</span>
+        </span>
+      </a>
+      <nav class="pill-nav" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/try-a-lesson" aria-current="page">Try a lesson</a>
+        <a href="/contact">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="/sign-in" class="nav-link">Sign in</a>
+        <a href="/sign-up" class="nav-action">Sign up</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="lesson-page">
+    <div class="lesson-top">
+      <a href="/try-a-lesson" class="back-link">← Back</a>
+      <span class="breadcrumb">Science › Physical Science › Sound and Light</span>
+    </div>
+
+    <div class="lesson-banner">
+      <img src="/assets/img/lesson-whale.jpg" alt="A misty room with a flashlight beam." />
+    </div>
+
+    <h1 class="lesson-title">Light Travels in Straight Lines</h1>
+
+    <div class="lesson-block">
+      <p class="label">💡 Big question</p>
+      <h2>How does light move from a source?</h2>
+      <p>A flashlight beam makes a straight path through mist because tiny droplets scatter some of the light toward your eyes. Follow that path and you will see why shadows have sharp edges and why you cannot peek around a corner without a mirror.</p>
+    </div>
+
+    <div class="lesson-block">
+      <p class="label">🎯 By the end</p>
+      <p>You will be able to say, in your own words, that light travels in straight lines and point to clues (beams, shadows, blocked views) that show it.</p>
+    </div>
+
+    <div class="step-grid">
+      <div class="step-thumb"><img src="/assets/local/step-hook.webp" alt="" /><div class="cap">💡 Hook</div></div>
+      <div class="step-thumb"><img src="/assets/local/step-read.webp" alt="" /><div class="cap">📖 Read</div></div>
+      <div class="step-thumb"><img src="/assets/local/step-activity.webp" alt="" /><div class="cap">🧪 Activity</div></div>
+    </div>
+
+    <div class="lesson-cta">
+      <h2>Ready to explore the full lesson?</h2>
+      <div class="actions" style="justify-content:center">
+        <a href="/sign-up" class="button button-primary">Start free trial →</a>
+        <a href="/try-a-lesson" class="button button-ghost">Try another lesson</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark">0→1</span>
+        <span>zeroto1.academy</span>
+      </div>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="/">Home</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/try-a-lesson">Try a lesson</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+      </nav>
+    </div>
+    <p class="footer-legal">© 2026 zeroto1.academy. Made for curious kids.</p>
+  </footer>
+
+  <script src="/assets/app.js"></script>
+</body>
+</html>

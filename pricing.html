@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zeroto1.academy Pricing — One family price</title>
+  <meta name="description" content="Simple family pricing for zeroto1.academy. One price for the whole household. Monthly and yearly plans." />
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="/" class="brand" aria-label="zeroto1.academy home">
+        <span class="brand-mark">0→1</span>
+        <span class="brand-text">
+          <span class="brand-name">zeroto1.academy</span>
+          <span class="brand-tag">Lessons for curious kids</span>
+        </span>
+      </a>
+      <nav class="pill-nav" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/pricing" aria-current="page">Pricing</a>
+        <a href="/try-a-lesson">Try a lesson</a>
+        <a href="/contact">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="/sign-in" class="nav-link">Sign in</a>
+        <a href="/sign-up" class="nav-action">Sign up</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="pricing-page">
+    <div class="pricing-head">
+      <span class="eyebrow">Simple family pricing</span>
+      <h1>One price for the whole family.</h1>
+      <p>No per-student math. Pay unlocks features.</p>
+
+      <div class="billing-toggle" data-billing-toggle data-billing="yearly">
+        <button type="button" data-set="monthly">Monthly</button>
+        <button type="button" data-set="yearly">Yearly</button>
+      </div>
+    </div>
+
+    <div class="plan-wrap">
+      <div class="plan">
+        <div class="plan-top">
+          <span class="plan-name">Household plan</span>
+          <div class="plan-price" data-bill-yearly>
+            <span class="amt"><span data-price="currency">$</span><span data-price="yearly">99</span></span>
+            <span class="per" data-price="yearly-per">/year</span>
+          </div>
+          <div class="plan-price" data-bill-monthly style="display:none">
+            <span class="amt"><span data-price="currency">$</span><span data-price="monthly">19</span></span>
+            <span class="per" data-price="monthly-per">/month</span>
+          </div>
+          <p class="plan-sub">per household · for your family</p>
+        </div>
+
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Lessons, math practice, rewards, Deep Dive</li>
+          <li><span class="check">✓</span> Parent view of finished work &amp; stuck points</li>
+          <li><span class="check">✓</span> ~75 custom lessons every 30 days</li>
+          <li><span class="check">✓</span> <span data-bill-yearly style="display:inline">Founding Member pricing — <s data-price="list-yearly">$150</s> <b data-price="yearly">$99</b></span><span data-bill-monthly style="display:none">Standard monthly</span></li>
+        </ul>
+
+        <div class="plan-cta">
+          <a href="/sign-up" class="button button-primary">Sign up</a>
+          <p class="plan-note" data-bill-yearly data-price="yearly-note">Founding Member · Billed $99/year · Cancel anytime</p>
+          <p class="plan-note" data-bill-monthly style="display:none" data-price="monthly-note">Billed $19/month · Cancel anytime</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq">
+      <h2>FAQ</h2>
+
+      <details class="faq-item">
+        <summary>Do I pay for each child?</summary>
+        <div class="faq-a">No. One price covers your whole household.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>What is included?</summary>
+        <div class="faq-a">Lessons, math practice, rewards, Deep Dive, and a parent view of finished work and where a child got stuck. If a child asks a question and it becomes a lesson, that counts toward about 75 custom lessons every 30 days.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>What happens when we use the 75 custom lessons?</summary>
+        <div class="faq-a">They reset every 30 days. Unused ones do not carry over. If you need more, you can purchase more custom lessons.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Can I cancel?</summary>
+        <div class="faq-a">Yes. You keep access until the time you already paid for ends.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Can I get a refund?</summary>
+        <div class="faq-a">Yes. Within 30 days of paying, email <a href="mailto:hello@zeroto1.academy"><span data-price="refund-contact">hello@zeroto1.academy</span></a> and we will refund you. The charge on your card says ZEROTO1.</div>
+      </details>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark">0→1</span>
+        <span>
+          zeroto1.academy
+          <span class="tagline">Lessons for curious kids.</span>
+        </span>
+      </div>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="/">Home</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/try-a-lesson">Try a lesson</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/sign-in">Sign in</a>
+      </nav>
+    </div>
+    <p class="footer-legal">© 2026 zeroto1.academy. Made for curious kids.</p>
+  </footer>
+
+  <script src="/assets/app.js"></script>
+</body>
+</html>

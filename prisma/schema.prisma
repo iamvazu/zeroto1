@@ -1,0 +1,243 @@
+// zeroto1.academy — Prisma Schema (SQLite for local development)
+// PRD §7.3 data model with all 13 core tables
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// 1. Households (Billing & family entity)
+model Household {
+  id                    String          @id @default(cuid())
+  name                  String
+  region                String          @default("US") // "US" | "IN"
+  customLessonAllowance Int             @default(75)   // ~75 per 30 days
+  allowanceResetAt      DateTime        @default(now())
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+
+  users                 User[]
+  kidProfiles           KidProfile[]
+  subscription          Subscription?
+  customLessons         CustomLesson[]
+
+  @@map("households")
+}
+
+// 2. Users (Parent / Guardian account)
+model User {
+  id           String    @id @default(cuid())
+  householdId  String    @map("household_id")
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  name         String
+  role         String    @default("PARENT") // "PARENT" | "ADMIN"
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  household    Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+
+  @@map("users")
+}
+
+// 3. Kid Profiles (Children under household)
+model KidProfile {
+  id               String            @id @default(cuid())
+  householdId      String            @map("household_id")
+  displayName      String            @map("display_name")
+  avatar           String?
+  ageBand          String            @map("age_band") // "5-8" | "8-11" | "11-15"
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  household        Household         @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  lessonProgress   LessonProgress[]
+  practiceSessions PracticeSession[]
+  customLessons    CustomLesson[]
+
+  @@map("kid_profiles")
+}
+
+// 4. Subjects (History, Science, Art)
+model Subject {
+  id          String   @id @default(cuid())
+  slug        String   @unique // "history" | "science" | "art"
+  name        String
+  description String
+  icon        String?
+  color       String?
+  orderIndex  Int      @default(0) @map("order_index")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  units       Unit[]
+
+  @@map("subjects")
+}
+
+// 5. Units (Themed modules under a subject)
+model Unit {
+  id          String   @id @default(cuid())
+  subjectId   String   @map("subject_id")
+  slug        String
+  title       String
+  description String?
+  bannerImage String?  @map("banner_image")
+  orderIndex  Int      @default(0) @map("order_index")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  subject     Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  lessons     Lesson[]
+
+  @@unique([subjectId, slug])
+  @@map("units")
+}
+
+// 6. Lessons (Atomic learning object)
+model Lesson {
+  id          String           @id @default(cuid())
+  unitId      String           @map("unit_id")
+  slug        String
+  title       String
+  summary     String?
+  bigQuestion String           @map("big_question")
+  byTheEnd    String           @map("by_the_end")
+  bannerImage String?          @map("banner_image")
+  orderIndex  Int              @default(0) @map("order_index")
+  isPublished Boolean          @default(true) @map("is_published")
+  isPreview   Boolean          @default(false) @map("is_preview")
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  unit        Unit             @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  steps       LessonStep[]
+  progress    LessonProgress[]
+
+  @@unique([unitId, slug])
+  @@map("lessons")
+}
+
+// 7. Lesson Steps (Ordered 6-step flow per PRD §5.1 & §6.3)
+model LessonStep {
+  id        String   @id @default(cuid())
+  lessonId  String   @map("lesson_id")
+  stepType  String   @map("step_type") // "HOOK" | "VIDEO" | "READ" | "ACTIVITY" | "PRACTICE" | "DEEP_DIVE"
+  stepOrder Int      @map("step_order") // 1..6
+  content   String   // JSON stringified per PRD §6.3 schema
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([lessonId, stepOrder])
+  @@map("lesson_steps")
+}
+
+// 8. Lesson Progress (Per kid, per lesson tracking)
+model LessonProgress {
+  id               String    @id @default(cuid())
+  kidProfileId     String    @map("kid_profile_id")
+  lessonId         String    @map("lesson_id")
+  status           String    @default("NOT_STARTED") // "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED"
+  currentStepOrder Int       @default(1) @map("current_step_order")
+  completedSteps   String?   @map("completed_steps") // JSON array of step types or orders
+  quizScore        Int?      @map("quiz_score")
+  completedAt      DateTime? @map("completed_at")
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  kidProfile       KidProfile @relation(fields: [kidProfileId], references: [id], onDelete: Cascade)
+  lesson           Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([kidProfileId, lessonId])
+  @@index([kidProfileId, lessonId])
+  @@map("lesson_progress")
+}
+
+// 9. Custom Lessons (AI-generated lessons)
+model CustomLesson {
+  id           String     @id @default(cuid())
+  householdId  String     @map("household_id")
+  kidProfileId String     @map("kid_profile_id")
+  question     String
+  subject      String
+  ageBand      String     @map("age_band")
+  lessonData   String     @map("lesson_data") // schema-compliant JSON 6-step lesson
+  status       String     @default("READY")   // "GENERATING" | "READY" | "FAILED"
+  createdAt    DateTime   @default(now())
+
+  household    Household  @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  kidProfile   KidProfile @relation(fields: [kidProfileId], references: [id], onDelete: Cascade)
+
+  @@map("custom_lessons")
+}
+
+// 10. Practice Sessions (Math and Typing)
+model PracticeSession {
+  id              String     @id @default(cuid())
+  kidProfileId    String     @map("kid_profile_id")
+  type            String     // "MATH" | "TYPING"
+  mode            String?    // "free" | "clock" | "streak"
+  operator        String?    // "+", "-", "*", "/"
+  score           Int?
+  accuracy        Float?
+  wpm             Float?
+  durationSeconds Int?       @map("duration_seconds")
+  metadata        String?    // JSON metadata
+  createdAt       DateTime   @default(now())
+
+  kidProfile      KidProfile @relation(fields: [kidProfileId], references: [id], onDelete: Cascade)
+
+  @@map("practice_sessions")
+}
+
+// 11. Subscriptions (Household Stripe link)
+model Subscription {
+  id                   String    @id @default(cuid())
+  householdId          String    @unique @map("household_id")
+  stripeCustomerId     String?   @map("stripe_customer_id")
+  stripeSubscriptionId String?   @map("stripe_subscription_id")
+  status               String    @default("INACTIVE") // "ACTIVE" | "TRIALING" | "CANCELED" | "INACTIVE" | "PAST_DUE"
+  plan                 String    @default("MONTHLY")  // "MONTHLY" | "YEARLY"
+  currency             String    @default("USD")      // "USD" | "INR"
+  currentPeriodEnd     DateTime? @map("current_period_end")
+  cancelAtPeriodEnd    Boolean   @default(false) @map("cancel_at_period_end")
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  household            Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
+
+// 12. AI Jobs (Async AI middleware job tracking)
+model AiJob {
+  id        String   @id @default(cuid())
+  taskType  String   @map("task_type") // "CLASSIFY" | "GENERATE_LESSON" | "DEEP_DIVE" | "RE_EXPLAIN" | "MODERATE"
+  status    String   @default("PENDING") // "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED"
+  prompt    String
+  response  String?  // JSON response
+  error     String?
+  latencyMs Int?     @map("latency_ms")
+  cached    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("ai_jobs")
+}
+
+// 13. Moderation Logs (Audit trail for guardrails)
+model ModerationLog {
+  id        String   @id @default(cuid())
+  source    String   // "INPUT" | "OUTPUT"
+  text      String
+  verdict   String   // "PASS" | "FAIL"
+  reason    String?
+  createdAt DateTime @default(now())
+
+  @@map("moderation_logs")
+}

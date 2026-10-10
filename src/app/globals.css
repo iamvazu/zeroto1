@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url('/assets/fonts/Nunito-Variable.ttf') format('truetype');
+}
+
+:root {
+  --ink: #0f3a52;
+  --ink-soft: #3d5a6c;
+  --muted: #6b8494;
+  --cream: #fff8f0;
+  --sky: #eff8ff;
+  --sky-deep: #d9f0fb;
+  --blue: #1fa7e1;
+  --blue-dark: #0d7fb0;
+  --blue-soft: #63c5f1;
+  --amber: #ffb356;
+  --green: #75d06a;
+}
+
+body {
+  color: var(--ink);
+  font-family: 'Nunito', system-ui, sans-serif;
+  background-color: #fff8f0;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 12% -8%, rgba(255, 179, 86, 0.2), transparent 48%),
+    radial-gradient(ellipse 70% 45% at 88% 0%, rgba(99, 197, 241, 0.26), transparent 46%),
+    linear-gradient(180deg, #fff8f0 0%, #eff8ff 42%, #ffffff 100%);
+  min-height: 100vh;
+  margin: 0;
+}
+
+/* WCAG 2.1 AA Accessibility: Accessible focus rings */
+:focus-visible {
+  outline: 3px solid #1fa7e1;
+  outline-offset: 2px;
+}
+
+/* WCAG 2.1 AA Accessibility: Respect user prefers-reduced-motion setting */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
